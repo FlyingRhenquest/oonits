@@ -1,0 +1,31 @@
+This is a simple example to demonstrate how to use some template
+trickery to have C++ automatically and type-safely convert to a
+specific expected type. I have defined four unit types; meters, miles,
+kilometers and celcius.  These types only hold the units they're
+created with and do nothing else on their own.
+
+I've also created a templated converter class with specilizations for
+each of my distance classes. Each specialized class can convert from
+the other distance classes to the specialized distance. They also
+include a method to convert from the same distance class to itself.
+This is key to this technique, as it allows us to take any unit
+type without regard to what type it is, and convert it to the type
+we're expecting. If we get an object of the type we're expecting,
+we just get a copy of that object back from the conversion code.
+This does incur the overhead of making a copy, but we were probably
+going to do that anyway. If performance were a conern, it would
+be a fun challenge to try to convince the compiler to optimize
+this operation out.
+
+I've also written a test class whose job is to simply populate a
+vector of meters. The test class has a populate_vector method
+which is templated for the unit type. The unit type can be any
+class, as long as a converter exists which converts that unit type
+to meters. If no such converter exists, a compilation error will
+occur. Since my test and converter code both examine the unit's
+"unit" member, any object we pass also needs to have a public
+"unit" member or you'll get an compilation error.
+
+Andre Alexandrescu demonstrates similar techniques in his book, Modern
+C++ Design, which I highly recommend if you want to learn about C++
+template programming.
